@@ -1,0 +1,8 @@
+services:
+  script:
+    build:
+      context: .
+      dockerfile: Dockerfile.redis
+
+  redis:
+    image: redis:alpine
