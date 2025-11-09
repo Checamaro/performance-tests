@@ -5,7 +5,7 @@ from httpx import Response
 
 class CreateCardsRequestDict(TypedDict):
     """
-    Структура данных для создания новой виртуальной карты.
+    Структура данных для создания новой виртуальной/физической карты.
     """
     userId: str
     accountId: str
