@@ -12,6 +12,9 @@ class CreateCardsRequestDict(TypedDict):
 
 
 class CardsGatewayHTTPClient(HTTPClient):
+    """
+    Клиент для взаимодействия с /api/v1/cards сервиса http-gateway.
+    """
 
     def issue_virtual_card_api(self, request: CreateCardsRequestDict) -> Response:
         """

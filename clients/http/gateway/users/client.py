@@ -18,6 +18,7 @@ class UsersGatewayHTTPClient(HTTPClient):
     """
     Клиент для взаимодействия с /api/v1/users сервиса http-gateway.
     """
+
     def get_user_api(self, user_id: str) -> Response:
         """
         Получить данные пользователя по его user_id.
