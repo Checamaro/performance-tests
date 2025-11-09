@@ -29,4 +29,4 @@ class CardsGatewayHTTPClient(HTTPClient):
         :param request: Словарь с данными новой физической карты.
         :return: Ответ от сервера (объект httpx.Response).
         """
-        return self.post("/api/v1/cards/issue-virtual-card", json=request)
+        return self.post("/api/v1/cards/issue-physical-card", json=request)
