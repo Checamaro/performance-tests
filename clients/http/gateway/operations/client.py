@@ -63,7 +63,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
         :param request: Данные для создания операции комиссии
         :return: Ответ сервера с результатом создания операции
         """
-        return self.post("/api/v1/operations/make-fee-operation", json=request)
+        return self.post("/api/v1/operations/make-fee-operation", json=request.model_dump(by_alias=True))
 
     def make_top_up_operation_api(self, request: MakeTopUpOperationRequestSchema) -> Response:
         """
@@ -81,7 +81,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
         :param request: Данные для создания операции кэшбэка
         :return: Ответ сервера с результатом создания операции
         """
-        return self.post("/api/v1/operations/make-cashback-operation", json=request)
+        return self.post("/api/v1/operations/make-cashback-operation", json=request.model_dump(by_alias=True))
 
     def make_transfer_operation_api(self, request: MakeTransferOperationRequestSchema) -> Response:
         """
@@ -90,7 +90,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
         :param request: Данные для создания операции перевода
         :return: Ответ сервера с результатом создания операции
         """
-        return self.post("/api/v1/operations/make-transfer-operation", json=request)
+        return self.post("/api/v1/operations/make-transfer-operation", json=request.model_dump(by_alias=True))
 
     def make_purchase_operation_api(self, request: MakePurchaseOperationRequestSchema) -> Response:
         """
@@ -99,7 +99,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
         :param request: Данные для создания операции покупки, включая категорию
         :return: Ответ сервера с результатом создания операции
         """
-        return self.post("/api/v1/operations/make-purchase-operation", json=request)
+        return self.post("/api/v1/operations/make-purchase-operation", json=request.model_dump(by_alias=True))
 
     def make_bill_payment_operation_api(self, request: MakeBillPaymentOperationRequestSchema) -> Response:
         """
@@ -108,7 +108,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
         :param request: Данные для создания операции оплаты счета
         :return: Ответ сервера с результатом создания операции
         """
-        return self.post("/api/v1/operations/make-bill-payment-operation", json=request)
+        return self.post("/api/v1/operations/make-bill-payment-operation", json=request.model_dump(by_alias=True))
 
     def make_cash_withdrawal_operation_api(self, request: MakeCashWithdrawalOperationRequestSchema) -> Response:
         """
@@ -117,14 +117,12 @@ class OperationsGatewayHTTPClient(HTTPClient):
         :param request: Данные для создания операции снятия наличных
         :return: Ответ сервера с результатом создания операции
         """
-        return self.post("/api/v1/operations/make-cash-withdrawal-operation", json=request)
+        return self.post("/api/v1/operations/make-cash-withdrawal-operation", json=request.model_dump(by_alias=True))
 
     def make_fee_operation(self, card_id: str, account_id: str) -> MakeFeeOperationResponseSchema:
         request = MakeFeeOperationRequestSchema(
             card_id=card_id,
-            account_id=account_id,
-            status="COMPLETED",
-            amount=1500.00
+            account_id=account_id
         )
         response = self.make_fee_operation_api(request)
         return MakeFeeOperationResponseSchema.model_validate_json(response.text)
@@ -132,9 +130,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
     def make_top_up_operation(self, card_id: str, account_id: str) -> MakeTopUpOperationResponseSchema:
         request = MakeTopUpOperationRequestSchema(
             card_id=card_id,
-            account_id=account_id,
-            status="COMPLETED",
-            amount=1500.00
+            account_id=account_id
         )
         response = self.make_top_up_operation_api(request)
         return MakeTopUpOperationResponseSchema.model_validate_json(response.text)
@@ -142,9 +138,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
     def make_cashback_operation(self, card_id: str, account_id: str) -> MakeCashbackOperationResponseSchema:
         request = MakeCashbackOperationRequestSchema(
             card_id=card_id,
-            account_id=account_id,
-            status="COMPLETED",
-            amount=1500.00
+            account_id=account_id
         )
         response = self.make_cashback_operation_api(request)
         return MakeCashbackOperationResponseSchema.model_validate_json(response.text)
@@ -152,9 +146,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
     def make_transfer_operation(self, card_id: str, account_id: str) -> MakeTransferOperationResponseSchema:
         request = MakeTransferOperationRequestSchema(
             card_id=card_id,
-            account_id=account_id,
-            status="COMPLETED",
-            amount=1500.00
+            account_id=account_id
         )
         response = self.make_transfer_operation_api(request)
         return MakeTransferOperationResponseSchema.model_validate_json(response.text)
@@ -162,10 +154,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
     def make_purchase_operation(self, card_id: str, account_id: str) -> MakePurchaseOperationResponseSchema:
         request = MakePurchaseOperationRequestSchema(
             card_id=card_id,
-            account_id=account_id,
-            status="COMPLETED",
-            amount=1500.00,
-            category="restaurant"
+            account_id=account_id
         )
         response = self.make_purchase_operation_api(request)
         return MakePurchaseOperationResponseSchema.model_validate_json(response.text)
@@ -173,9 +162,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
     def make_bill_payment_operation(self, card_id: str, account_id: str) -> MakeBillPaymentOperationResponseSchema:
         request = MakeBillPaymentOperationRequestSchema(
             card_id=card_id,
-            account_id=account_id,
-            status="COMPLETED",
-            amount=1500.00
+            account_id=account_id
         )
         response = self.make_bill_payment_operation_api(request)
         return MakeBillPaymentOperationResponseSchema.model_validate_json(response.text)
@@ -184,9 +171,7 @@ class OperationsGatewayHTTPClient(HTTPClient):
                                        account_id: str) -> MakeCashWithdrawalOperationResponseSchema:
         request = MakeCashWithdrawalOperationRequestSchema(
             card_id=card_id,
-            account_id=account_id,
-            status="COMPLETED",
-            amount=1500.00
+            account_id=account_id
         )
         response = self.make_cash_withdrawal_operation_api(request)
         return MakeCashWithdrawalOperationResponseSchema.model_validate_json(response.text)
