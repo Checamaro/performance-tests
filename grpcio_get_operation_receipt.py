@@ -42,7 +42,7 @@ open_debit_card_account_response: OpenDebitCardAccountResponse = accounts_gatewa
 print('Open debit card account response:', open_debit_card_account_response)
 
 make_top_up_operation_request = MakeTopUpOperationRequest(
-    status=OperationStatus.OPERATION_STATUS_IN_PROGRESS,
+    status=OperationStatus.OPERATION_STATUS_COMPLETED,
     amount=fake.amount(),
     card_id=open_debit_card_account_response.account.cards[0].id,
     account_id=open_debit_card_account_response.account.id
