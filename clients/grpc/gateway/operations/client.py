@@ -214,7 +214,7 @@ class OperationsGatewayGRPCClient(GRPCClient):
         return self.get_operations_summary_api(request)
 
 
-def build_operations_gateway_http_client() -> OperationsGatewayGRPCClient:
+def build_operations_gateway_grpc_client() -> OperationsGatewayGRPCClient:
     """
     Фабрика для создания экземпляра OperationsGatewayGRPCClient.
 

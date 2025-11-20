@@ -55,7 +55,7 @@ class DocumentsGatewayGRPCClient(GRPCClient):
         return self.get_contract_document_api(request)
 
 
-def build_documents_gateway_http_client() -> DocumentsGatewayGRPCClient:
+def build_documents_gateway_grpc_client() -> DocumentsGatewayGRPCClient:
     """
     Фабрика для создания экземпляра DocumentsGatewayGRPCClient.
 
