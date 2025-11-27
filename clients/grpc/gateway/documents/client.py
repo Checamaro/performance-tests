@@ -1,9 +1,10 @@
 from httpx import request
+from locust.env import Environment
 
 from clients.grpc.client import GRPCClient
 from grpc import Channel
 
-from clients.grpc.gateway.client import build_gateway_grpc_client
+from clients.grpc.gateway.client import build_gateway_grpc_client, build_gateway_locust_grpc_client
 from contracts.services.gateway.documents.rpc_get_tariff_document_pb2 import GetTariffDocumentRequest, \
     GetTariffDocumentResponse
 from contracts.services.gateway.documents.rpc_get_contract_document_pb2 import GetContractDocumentRequest, \
@@ -62,3 +63,15 @@ def build_documents_gateway_grpc_client() -> DocumentsGatewayGRPCClient:
     :return: Инициализированный клиент для DocumentsGatewayService.
     """
     return DocumentsGatewayGRPCClient(channel=build_gateway_grpc_client())
+
+def build_documents_gateway_locust_grpc_client(environment: Environment) -> DocumentsGatewayGRPCClient:
+    """
+    Функция создаёт экземпляр DocumentsGatewayGRPCClient адаптированного под Locust.
+
+    Клиент автоматически собирает метрики и передаёт их в Locust через хуки.
+    Используется исключительно в нагрузочных тестах.
+
+    :param environment: объект окружения Locust.
+    :return: экземпляр DocumentsGatewayGRPCClient с хуками сбора метрик.
+    """
+    return DocumentsGatewayGRPCClient(channel=build_gateway_locust_grpc_client(environment))
