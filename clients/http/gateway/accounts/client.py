@@ -18,7 +18,7 @@ from clients.http.gateway.accounts.schema import (
 )
 
 
-class AccountGatewayHTTPClient(HTTPClient):
+class AccountsGatewayHTTPClient(HTTPClient):
     """
     Клиент для взаимодействия с /api/v1/accounts сервиса http-gateway.
     """
@@ -98,16 +98,16 @@ class AccountGatewayHTTPClient(HTTPClient):
         return OpenCreditCardAccountResponseSchema.model_validate_json(response.text)
 
 
-def build_accounts_gateway_http_client() -> AccountGatewayHTTPClient:
+def build_accounts_gateway_http_client() -> AccountsGatewayHTTPClient:
     """
     Функция создаёт экземпляр AccountsGatewayHTTPClient с уже настроенным HTTP-клиентом.
 
     :return: Готовый к использованию AccountsGatewayHTTPClient.
     """
-    return AccountGatewayHTTPClient(client=build_gateway_http_client())
+    return AccountsGatewayHTTPClient(client=build_gateway_http_client())
 
 
-def build_accounts_gateway_locust_http_client(environment: Environment) -> AccountGatewayHTTPClient:
+def build_accounts_gateway_locust_http_client(environment: Environment) -> AccountsGatewayHTTPClient:
     """
     Функция создаёт экземпляр AccountsGatewayHTTPClient адаптированного под Locust.
 
@@ -117,4 +117,4 @@ def build_accounts_gateway_locust_http_client(environment: Environment) -> Accou
     :param environment: объект окружения Locust.
     :return: экземпляр AccountsGatewayHTTPClient с хуками сбора метрик.
     """
-    return AccountGatewayHTTPClient(client=build_gateway_locust_http_client(environment))
+    return AccountsGatewayHTTPClient(client=build_gateway_locust_http_client(environment))
