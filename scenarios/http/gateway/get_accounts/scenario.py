@@ -1,7 +1,9 @@
 from clients.http.gateway.users.schema import CreateUserResponseSchema
 from clients.http.gateway.accounts.schema import OpenDepositAccountResponseSchema
 from clients.http.gateway.locust import GatewayHTTPSequentialTaskSet
-from locust import User, between, task
+from locust import task
+
+from tools.locust.user import LocustBaseUser
 
 
 class GetAccountsSequentialTaskSet(GatewayHTTPSequentialTaskSet):
@@ -47,10 +49,8 @@ class GetAccountsSequentialTaskSet(GatewayHTTPSequentialTaskSet):
         )
 
 
-class GetDocumentsUser(User):
+class GetDocumentsUser(LocustBaseUser):
     """
     Пользователь Locust, исполняющий последовательный сценарий получения списка счетов.
     """
-    host = "localhost"
     tasks = [GetAccountsSequentialTaskSet]
-    wait_time = between(1, 3)
