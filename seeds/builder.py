@@ -21,6 +21,7 @@ class SeedsBulider:
         accounts_gateway_client: Клиент для открытия счетов
         operations_gateway_client: Клиент для операций (топ-ап, покупки и т.д.)
     """
+
     def __init__(
             self,
             users_gateway_client: UsersGatewayGRPCClient | UsersGatewayHTTPClient,
@@ -32,6 +33,13 @@ class SeedsBulider:
         self.cards_gateway_client = cards_gateway_client
         self.accounts_gateway_client = accounts_gateway_client
         self.operations_gateway_client = operations_gateway_client
+
+    def build_virtual_card_result(self, user_id: str, account_id: str) -> SeedCardResult:
+        response = self.cards_gateway_client.issue_virtual_card(
+            user_id=user_id,
+            account_id=account_id
+        )
+        return SeedCardResult(card_id=response.card.id)
 
     def build_physical_card_result(self, user_id: str, account_id: str) -> SeedCardResult:
         """
@@ -119,10 +127,17 @@ class SeedsBulider:
             account_id=response.account.id,
             physical_cards=[self.build_physical_card_result(user_id=user_id, account_id=account_id) for _ in
                             range(plan.physical_cards.count)],
+            virtual_cards=[self.build_virtual_card_result(user_id=user_id, account_id=account_id) for _ in
+                           range(plan.virtual_cards.count)],
             top_up_operations=[self.build_top_up_operation_result(card_id=card_id, account_id=account_id) for _ in
                                range(plan.top_up_operations.count)],
             purchase_operations=[self.build_purchase_operation_result(card_id=card_id, account_id=account_id) for _ in
                                  range(plan.purchase_operations.count)],
+            transfer_operations=[self.build_transfer_operation_result(card_id=card_id, account_id=account_id) for _ in
+                                 range(plan.transfer_operations.count)],
+            cash_withdrawal_operations=[
+                self.build_cash_withdrawal_operation_result(card_id=card_id, account_id=account_id) for _ in
+                range(plan.cash_withdrawal_operations.count)]
         )
 
     def build_credit_card_account_result(self, plan: SeedAccountsPlan, user_id: str) -> SeedAccountResult:
@@ -147,10 +162,18 @@ class SeedsBulider:
             account_id=response.account.id,
             physical_cards=[self.build_physical_card_result(user_id=user_id, account_id=account_id) for _ in
                             range(plan.physical_cards.count)],
+            virtual_cards=[self.build_virtual_card_result(user_id=user_id, account_id=account_id) for _ in
+                           range(plan.virtual_cards.count)],
             top_up_operations=[self.build_top_up_operation_result(card_id=card_id, account_id=account_id) for _ in
                                range(plan.top_up_operations.count)],
-            purchase_operations=[self.build_purchase_operation_result(card_id=card_id, account_id=account_id) for _ in
+            purchase_operations=[self.build_purchase_operation_result(card_id=card_id, account_id=account_id) for _
+                                 in
                                  range(plan.purchase_operations.count)],
+            transfer_operations=[self.build_transfer_operation_result(card_id=card_id, account_id=account_id) for _ in
+                                 range(plan.transfer_operations.count)],
+            cash_withdrawal_operations=[
+                self.build_cash_withdrawal_operation_result(card_id=card_id, account_id=account_id) for _ in
+                range(plan.cash_withdrawal_operations.count)]
         )
 
     def build_savings_account_result(self, user_id: str) -> SeedAccountResult:
@@ -165,6 +188,20 @@ class SeedsBulider:
         """
         response = self.accounts_gateway_client.open_savings_account(user_id=user_id)
         return SeedAccountResult(account_id=response.account.id)
+
+    def build_transfer_operation_result(self, card_id: str, account_id: str) -> SeedOperationResult:
+        response = self.operations_gateway_client.make_transfer_operation(
+            card_id=card_id,
+            account_id=account_id
+        )
+        return SeedOperationResult(operation_id=response.operation.id)
+
+    def build_cash_withdrawal_operation_result(self, card_id: str, account_id: str) -> SeedOperationResult:
+        response = self.operations_gateway_client.make_cash_withdrawal_operation(
+            card_id=card_id,
+            account_id=account_id
+        )
+        return SeedOperationResult(operation_id=response.operation.id)
 
     def build_user(self, plan: SeedUsersPlan) -> SeedUserResult:
         """
@@ -187,10 +224,12 @@ class SeedsBulider:
             savings_accounts=[self.build_savings_account_result(user_id=response.user.id) for _ in
                               range(plan.savings_accounts.count)],
             debit_card_accounts=[
-                self.build_debit_card_account_result(plan=plan.debit_card_accounts, user_id=response.user.id) for _ in
+                self.build_debit_card_account_result(plan=plan.debit_card_accounts, user_id=response.user.id) for _
+                in
                 range(plan.debit_card_accounts.count)],
             credit_card_accounts=[
-                self.build_credit_card_account_result(plan=plan.credit_card_accounts, user_id=response.user.id) for _ in
+                self.build_credit_card_account_result(plan=plan.credit_card_accounts, user_id=response.user.id) for
+                _ in
                 range(plan.credit_card_accounts.count)],
         )
 
@@ -222,6 +261,7 @@ def build_grpc_seeds_builder() -> SeedsBulider:
         accounts_gateway_client=build_accounts_gateway_grpc_client(),
         operations_gateway_client=build_operations_gateway_grpc_client(),
     )
+
 
 def build_http_seeds_builder() -> SeedsBulider:
     """
