@@ -218,7 +218,7 @@ class SeedsBulider:
         response = self.users_gateway_client.create_user()
 
         return SeedUserResult(
-            user_id=response.id,
+            user_id=response.user.id,
             deposit_accounts=[self.build_deposit_account_result(user_id=response.user.id) for _ in
                               range(plan.deposit_accounts.count)],
             savings_accounts=[self.build_savings_account_result(user_id=response.user.id) for _ in
