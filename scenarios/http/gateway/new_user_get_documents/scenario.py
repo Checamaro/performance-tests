@@ -45,10 +45,10 @@ class GetDocumentsSequentialTaskSet(GatewayHTTPSequentialTaskSet):
         if not self.open_savings_account_response:
             return
         self.documents_gateway_client.get_tariff_document(
-            account_id=self.open_savings_account_response.account_id
+            account_id=self.open_savings_account_response.account.id
         )
         self.documents_gateway_client.get_contract_document(
-            account_id=self.open_savings_account_response.account_id
+            account_id=self.open_savings_account_response.account.id
         )
 
 
